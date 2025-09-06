@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: agrisense-ai
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: agrisense-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: agrisense-redis
+
+databases:
+  - name: agrisense-db
+    engine: postgres
+    version: 15
+
+services:
+  - type: redis
+    name: agrisense-redis
+    ipAllowList: [] # allow all connections

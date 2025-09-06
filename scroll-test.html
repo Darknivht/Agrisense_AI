@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scroll Test - AgriSense AI</title>
+    <style>
+        /* Ensure body and html can scroll */
+        html, body {
+            height: auto !important;
+            min-height: 100vh;
+            overflow-x: hidden;
+            overflow-y: auto !important;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Test background */
+        .test-bg {
+            background: linear-gradient(-45deg, #22c55e, #3b82f6, #8b5cf6, #f59e0b);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .content-section {
+            padding: 100px 20px;
+            color: white;
+            text-align: center;
+        }
+
+        .section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="test-bg">
+    
+    <div class="section">
+        <h1>🌾 Section 1 - Welcome to AgriSense AI</h1>
+    </div>
+
+    <div class="section" style="background: rgba(0,0,0,0.2);">
+        <h1>🤖 Section 2 - AI-Powered Agriculture</h1>
+    </div>
+
+    <div class="section" style="background: rgba(0,0,0,0.1);">
+        <h1>🌱 Section 3 - Smart Farming Solutions</h1>
+    </div>
+
+    <div class="section" style="background: rgba(0,0,0,0.3);">
+        <h1>🚀 Section 4 - Ready to Deploy!</h1>
+    </div>
+
+    <div class="content-section">
+        <h2>✅ Scrolling Test Complete!</h2>
+        <p>If you can see this section, scrolling is working properly!</p>
+        <p>The animated background should continue throughout the page.</p>
+    </div>
+
+</body>
+</html>

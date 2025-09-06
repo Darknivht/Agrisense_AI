@@ -1,0 +1,316 @@
+{% extends "base.html" %}
+
+{% block title %}AgriSense AI - Smart Agricultural Intelligence{% endblock %}
+
+{% block content %}
+<div class="relative">
+    <!-- Hero Section -->
+    <div class="relative agri-bg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-10">
+            <div class="text-center">
+                <div class="flex justify-center mb-8">
+                    <div class="w-20 h-20 rounded-2xl glass card-stack float flex items-center justify-center">
+                        <i class="fas fa-seedling text-white text-3xl"></i>
+                    </div>
+                </div>
+                
+                <h1 class="text-5xl font-bold text-white mb-6 animate-slide-up">
+                    Welcome to <span class="text-gradient">AgriSense AI</span>
+                </h1>
+                
+                <p class="text-xl text-white/90 mb-8 max-w-3xl mx-auto animate-fade-in">
+                    Empowering Nigerian farmers with AI-driven insights, multilingual support, 
+                    and real-time agricultural guidance in English, Hausa, Yoruba, Igbo, and Fulfulde.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-6 justify-center mb-12">
+                    <button onclick="showRegisterForm()" class="btn-liquid ripple px-10 py-5 text-lg font-bold rounded-2xl">
+                        <i class="fas fa-user-plus mr-3"></i>
+                        Get Started Free
+                    </button>
+                    
+                    <button onclick="showLoginForm()" class="btn-neon px-10 py-5 text-lg font-bold rounded-2xl">
+                        <i class="fas fa-sign-in-alt mr-3"></i>
+                        Sign In
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="py-16 particle-bg relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-white mb-4 animate-slide-up">Why Choose AgriSense AI?</h2>
+                <p class="text-lg text-white/80 animate-fade-in">Advanced technology designed specifically for African agriculture</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="glass-card card-hover p-8 border border-white/20">
+                    <div class="w-12 h-12 rounded-xl glass float flex items-center justify-center mb-6">
+                        <i class="fas fa-brain text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">AI-Powered Insights</h3>
+                    <p class="text-white/80">Get personalized farming advice using advanced AI trained on Nigerian agricultural data.</p>
+                </div>
+                
+                <div class="glass-card card-hover p-8 border border-white/20">
+                    <div class="w-12 h-12 rounded-xl glass float flex items-center justify-center mb-6">
+                        <i class="fas fa-language text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Multilingual Support</h3>
+                    <p class="text-white/80">Communicate in your preferred language: English, Hausa, Yoruba, Igbo, or Fulfulde.</p>
+                </div>
+                
+                <div class="glass-card card-hover p-8 border border-white/20">
+                    <div class="w-12 h-12 rounded-xl glass float flex items-center justify-center mb-6">
+                        <i class="fas fa-cloud-sun text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Weather Alerts</h3>
+                    <p class="text-white/80">Receive real-time weather updates and farming alerts via SMS and WhatsApp.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Login Modal -->
+<div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="glass-card animate-slide-up p-8 w-full max-w-md">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-white">Sign In</h2>
+                <button onclick="closeModal('loginModal')" class="text-white/70 hover:text-white">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <form id="loginForm">
+                <div class="mb-4">
+                    <label class="block text-white text-sm font-medium mb-2">Phone Number</label>
+                    <input type="tel" id="loginPhone" class="form-input w-full bg-white/20 border-white/30 text-white placeholder-white/60" placeholder="e.g., 08123456789" required>
+                </div>
+                
+                <button type="submit" class="btn-3d w-full py-4 rounded-xl font-bold">
+                    <i class="fas fa-sign-in-alt mr-2"></i>
+                    Sign In
+                </button>
+            </form>
+            
+            <p class="text-center text-white/80 mt-4">
+                Don't have an account? 
+                <button onclick="switchToRegister()" class="text-white hover:text-white/90 font-medium underline">
+                    Sign up here
+                </button>
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Register Modal -->
+<div id="registerModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="glass-card animate-slide-up p-8 w-full max-w-md">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-white">Create Account</h2>
+                <button onclick="closeModal('registerModal')" class="text-white/70 hover:text-white">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <form id="registerForm">
+                <div class="mb-4">
+                    <label class="block text-white text-sm font-medium mb-2">Full Name</label>
+                    <input type="text" id="registerName" class="form-input w-full bg-white/20 border-white/30 text-white placeholder-white/60" placeholder="Your full name" required>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-white text-sm font-medium mb-2">Phone Number</label>
+                    <input type="tel" id="registerPhone" class="form-input w-full bg-white/20 border-white/30 text-white placeholder-white/60" placeholder="e.g., 08123456789" required>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-white text-sm font-medium mb-2">Location</label>
+                    <input type="text" id="registerLocation" class="form-input w-full bg-white/20 border-white/30 text-white placeholder-white/60" placeholder="e.g., Lagos, Nigeria" required>
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-white text-sm font-medium mb-2">Preferred Language</label>
+                    <select id="registerLanguage" class="form-input w-full bg-white/20 border-white/30 text-white" required>
+                        <option value="en">English</option>
+                        <option value="ha">Hausa</option>
+                        <option value="yo">Yoruba</option>
+                        <option value="ig">Igbo</option>
+                        <option value="ff">Fulfulde</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn-3d w-full py-4 rounded-xl font-bold">
+                    <i class="fas fa-user-plus mr-2"></i>
+                    Create Account
+                </button>
+            </form>
+            
+            <p class="text-center text-gray-600 mt-4">
+                Already have an account? 
+                <button onclick="switchToLogin()" class="text-agri-green-600 hover:text-agri-green-700 font-medium">
+                    Sign in here
+                </button>
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+// Check if user is already logged in and redirect
+function checkAuthAndRedirect() {
+    const token = localStorage.getItem('authToken');
+    const user = localStorage.getItem('currentUser');
+    
+    if (token && user) {
+        // User is already logged in, redirect to dashboard
+        window.location.href = '/dashboard';
+        return;
+    }
+}
+
+// Modal functions
+function showLoginForm() {
+    document.getElementById('loginModal').classList.remove('hidden');
+}
+
+function showRegisterForm() {
+    document.getElementById('registerModal').classList.remove('hidden');
+}
+
+function closeModal(modalId) {
+    document.getElementById(modalId).classList.add('hidden');
+}
+
+function switchToRegister() {
+    closeModal('loginModal');
+    showRegisterForm();
+}
+
+function switchToLogin() {
+    closeModal('registerModal');
+    showLoginForm();
+}
+
+// Form handlers
+document.getElementById('loginForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const phone = document.getElementById('loginPhone').value;
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+    
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Signing In...';
+    submitBtn.disabled = true;
+    
+    try {
+        const response = await fetch('/api/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ phone: phone })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            // Store auth data
+            localStorage.setItem('authToken', data.access_token);
+            localStorage.setItem('currentUser', JSON.stringify(data.user));
+            
+            // Redirect to dashboard
+            window.location.href = '/dashboard';
+        } else {
+            showNotification(data.error || 'Login failed', 'error');
+        }
+    } catch (error) {
+        showNotification('Login failed. Please try again.', 'error');
+        console.error('Login error:', error);
+    } finally {
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+    }
+});
+
+document.getElementById('registerForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = {
+        name: document.getElementById('registerName').value,
+        phone: document.getElementById('registerPhone').value,
+        location: document.getElementById('registerLocation').value,
+        language: document.getElementById('registerLanguage').value
+    };
+    
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+    
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Creating Account...';
+    submitBtn.disabled = true;
+    
+    try {
+        const response = await fetch('/api/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData)
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            // Store auth data
+            localStorage.setItem('authToken', data.access_token);
+            localStorage.setItem('currentUser', JSON.stringify(data.user));
+            
+            // Redirect to dashboard
+            window.location.href = '/dashboard';
+        } else {
+            showNotification(data.error || 'Registration failed', 'error');
+        }
+    } catch (error) {
+        showNotification('Registration failed. Please try again.', 'error');
+        console.error('Registration error:', error);
+    } finally {
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+    }
+});
+
+// Notification function
+function showNotification(message, type) {
+    const notification = document.createElement('div');
+    notification.className = `fixed top-4 right-4 p-4 rounded-lg text-white z-50 ${
+        type === 'error' ? 'bg-red-500' : 'bg-green-500'
+    }`;
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.remove();
+    }, 5000);
+}
+
+// Close modals on Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeModal('loginModal');
+        closeModal('registerModal');
+    }
+});
+
+// Check auth on page load
+document.addEventListener('DOMContentLoaded', function() {
+    checkAuthAndRedirect();
+});
+</script>
+{% endblock %}

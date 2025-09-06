@@ -1,0 +1,614 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - AgriSense AI{% endblock %}
+
+{% block content %}
+<!-- Navigation Bar -->
+<nav class="bg-white shadow-lg border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+            <div class="flex items-center">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-agri-green-500 to-agri-blue-500 flex items-center justify-center">
+                        <i class="fas fa-seedling text-white text-lg"></i>
+                    </div>
+                    <span class="text-xl font-bold text-gray-900">AgriSense AI</span>
+                </div>
+                
+                <div class="hidden md:block ml-10">
+                    <div class="flex items-baseline space-x-4">
+                        <a href="/dashboard" class="bg-agri-green-100 text-agri-green-700 px-3 py-2 rounded-md text-sm font-medium">
+                            Dashboard
+                        </a>
+                        <a href="/chat" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
+                            Chat
+                        </a>
+                        <a href="/settings" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
+                            Settings
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <span class="user-name text-gray-700 font-medium">Loading...</span>
+                <button onclick="logout()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="cyber-bg relative pt-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        
+        <!-- Welcome Header -->
+        <div class="mb-8">
+            <div class="glass-card rounded-3xl p-8 animate-slide-up">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h1 class="text-3xl font-bold text-white mb-2 text-gradient welcome-message">
+                            Welcome back! 🌾
+                        </h1>
+                        <p class="text-lg text-white/80">
+                            Ready to optimize your farming with AI-powered insights?
+                        </p>
+                        <div class="flex items-center mt-4 space-x-6">
+                            <div class="flex items-center text-sm text-gray-600">
+                                <i class="fas fa-map-marker-alt mr-2 text-agri-green-500"></i>
+                                <span class="user-location">Loading...</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-600">
+                                <i class="fas fa-language mr-2 text-agri-blue-500"></i>
+                                <span class="user-language">EN</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-600" style="display: none;" id="farm-size-info">
+                                <i class="fas fa-ruler-combined mr-2 text-agri-amber-500"></i>
+                                <span class="user-farm-size">0</span> hectares
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hidden md:block">
+                        <div class="w-24 h-24 rounded-full bg-gradient-to-br from-agri-green-500 to-agri-blue-500 flex items-center justify-center">
+                            <i class="fas fa-user text-white text-3xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="glass-card card-hover rounded-2xl p-6 animate-fade-in">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-white/80">Conversations</p>
+                        <p class="text-2xl font-bold text-white" id="conversations-count">0</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-xl glass float flex items-center justify-center">
+                        <i class="fas fa-comments text-white"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="glass-card card-hover rounded-2xl p-6 animate-fade-in">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-white/80">Documents</p>
+                        <p class="text-2xl font-bold text-white" id="documents-count">0</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-xl glass float flex items-center justify-center">
+                        <i class="fas fa-file-pdf text-white"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="glass-card card-hover rounded-2xl p-6 animate-fade-in">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-white/80">Alerts Active</p>
+                        <p class="text-2xl font-bold text-white" id="alerts-count">0</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-xl glass float flex items-center justify-center">
+                        <i class="fas fa-bell text-white"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="glass-card card-hover rounded-2xl p-6 animate-fade-in">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-white/80">Member Since</p>
+                        <p class="text-lg font-bold text-white" id="member-since">...</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-xl glass float flex items-center justify-center">
+                        <i class="fas fa-calendar text-white"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            <!-- Quick Chat -->
+            <div class="glass-card rounded-3xl overflow-hidden animate-slide-up">
+                <div class="glass p-6">
+                    <h2 class="text-xl font-bold text-white flex items-center">
+                        <i class="fas fa-robot mr-3"></i>
+                        Quick Chat with AgriSense AI
+                    </h2>
+                </div>
+                
+                <div class="p-6">
+                    <div id="quick-chat-messages" class="h-64 overflow-y-auto mb-4 space-y-3">
+                        <div class="flex items-start space-x-3">
+                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-agri-green-500 to-agri-blue-500 flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-robot text-white text-sm"></i>
+                            </div>
+                            <div class="bg-gray-100 rounded-2xl rounded-tl-md px-4 py-3 max-w-xs">
+                                <p class="text-gray-800 text-sm">
+                                    <span id="welcome-message">Hello! How can I help you with your farming today?</span>
+                                    Ask about weather, crops, market prices, or upload documents for insights.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex space-x-3">
+                        <input type="text" 
+                               id="quick-chat-input" 
+                               placeholder="Ask me anything..." 
+                               class="flex-1 px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-agri-green-500 focus:border-transparent">
+                        <button onclick="sendQuickMessage()" 
+                                class="bg-gradient-to-r from-agri-green-500 to-agri-blue-500 text-white px-6 py-2 rounded-full font-medium hover:shadow-lg transition-all">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="bg-white rounded-3xl shadow-lg border border-gray-100">
+                <div class="px-6 py-4 border-b border-gray-100">
+                    <h2 class="text-xl font-bold text-gray-900 flex items-center">
+                        <i class="fas fa-history mr-3 text-agri-blue-500"></i>
+                        Recent Activity
+                    </h2>
+                </div>
+                
+                <div class="p-6">
+                    <div id="recent-activity" class="space-y-4">
+                        <!-- Recent activity will be loaded here via JavaScript -->
+                        <div class="text-center py-8">
+                            <i class="fas fa-spinner fa-spin text-gray-300 text-4xl mb-4"></i>
+                            <p class="text-gray-500">Loading recent activity...</p>
+                        </div>
+                    </div>
+                    
+                    <div id="view-all-conversations" class="mt-4 text-center" style="display: none;">
+                        <a href="#" class="text-agri-green-600 hover:text-agri-green-700 font-medium text-sm">
+                            View all conversations →
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Cards -->
+        <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            <!-- Weather Alerts -->
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 card-hover">
+                <div class="w-12 h-12 rounded-xl bg-agri-blue-100 flex items-center justify-center mb-4">
+                    <i class="fas fa-cloud-sun text-agri-blue-600 text-xl"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2">Weather Alerts</h3>
+                <p class="text-gray-600 mb-4">Get real-time weather updates and farming recommendations for your location.</p>
+                <button onclick="setupWeatherAlerts()" class="w-full bg-agri-blue-500 text-white py-2 rounded-xl font-medium hover:bg-agri-blue-600 transition-colors">
+                    Setup Alerts
+                </button>
+            </div>
+
+            <!-- Upload Documents -->
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 card-hover">
+                <div class="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center mb-4">
+                    <i class="fas fa-upload text-purple-600 text-xl"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2">Upload Documents</h3>
+                <p class="text-gray-600 mb-4">Upload agricultural PDFs and get instant AI-powered insights and answers.</p>
+                <button onclick="showUploadModal()" class="w-full bg-purple-500 text-white py-2 rounded-xl font-medium hover:bg-purple-600 transition-colors">
+                    Upload PDF
+                </button>
+            </div>
+
+            <!-- Market Prices -->
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 card-hover">
+                <div class="w-12 h-12 rounded-xl bg-agri-amber-100 flex items-center justify-center mb-4">
+                    <i class="fas fa-chart-line text-agri-amber-600 text-xl"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2">Market Insights</h3>
+                <p class="text-gray-600 mb-4">Track crop prices and get alerts when it's the best time to sell your produce.</p>
+                <button onclick="viewMarketPrices()" class="w-full bg-agri-amber-500 text-white py-2 rounded-xl font-medium hover:bg-agri-amber-600 transition-colors">
+                    View Prices
+                </button>
+            </div>
+        </div>
+
+        <!-- Farming Interests -->
+        <div id="farming-interests-section" class="mt-8 bg-white rounded-3xl shadow-lg border border-gray-100 p-6" style="display: none;">
+            <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                <i class="fas fa-seedling mr-3 text-agri-green-500"></i>
+                Your Farming Interests
+            </h2>
+            <div id="farming-interests-list" class="flex flex-wrap gap-3">
+                <!-- Interests will be loaded here via JavaScript -->
+            </div>
+            <div class="mt-4">
+                <button onclick="updateFarmingInterests()" class="text-agri-green-600 hover:text-agri-green-700 font-medium text-sm">
+                    <i class="fas fa-edit mr-1"></i>
+                    Update interests
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Upload Modal -->
+<div id="upload-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-8 animate-fade-in">
+        <div class="text-center mb-6">
+            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-upload text-white text-2xl"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900">Upload Document</h3>
+            <p class="text-gray-600">Upload agricultural PDFs for AI analysis</p>
+        </div>
+        
+        <form id="upload-form" enctype="multipart/form-data" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Select PDF File</label>
+                <input type="file" name="file" accept=".pdf" required 
+                       class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                <p class="text-xs text-gray-500 mt-1">Maximum file size: 16MB</p>
+            </div>
+            
+            <div class="flex space-x-3 pt-4">
+                <button type="button" onclick="hideUploadModal()" 
+                        class="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-xl font-medium hover:bg-gray-50 transition-colors">
+                    Cancel
+                </button>
+                <button type="submit" 
+                        class="flex-1 bg-gradient-to-r from-purple-500 to-purple-600 text-white px-4 py-3 rounded-xl font-medium hover:shadow-lg transition-all">
+                    Upload
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+// Quick chat functionality
+function sendQuickMessage() {
+    const input = document.getElementById('quick-chat-input');
+    const message = input.value.trim();
+    
+    if (!message) return;
+    
+    addQuickMessage(message, 'user');
+    input.value = '';
+    
+    // Send to API
+    fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        },
+        body: JSON.stringify({
+            message: message,
+            language: currentUser ? currentUser.preferred_language : 'en'
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.response) {
+            addQuickMessage(data.response, 'ai');
+        }
+    })
+    .catch(error => {
+        console.error('Chat error:', error);
+        addQuickMessage('Sorry, there was an error processing your message.', 'ai');
+    });
+}
+
+function addQuickMessage(text, sender) {
+    const messagesContainer = document.getElementById('quick-chat-messages');
+    const messageDiv = document.createElement('div');
+    
+    if (sender === 'user') {
+        messageDiv.innerHTML = `
+            <div class="flex items-start space-x-3 justify-end">
+                <div class="bg-gradient-to-r from-agri-green-500 to-agri-blue-500 text-white rounded-2xl rounded-tr-md px-4 py-3 max-w-xs">
+                    <p class="text-sm">${text}</p>
+                </div>
+                <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-user text-gray-600 text-sm"></i>
+                </div>
+            </div>
+        `;
+    } else {
+        messageDiv.innerHTML = `
+            <div class="flex items-start space-x-3">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-agri-green-500 to-agri-blue-500 flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-robot text-white text-sm"></i>
+                </div>
+                <div class="bg-gray-100 rounded-2xl rounded-tl-md px-4 py-3 max-w-xs">
+                    <p class="text-gray-800 text-sm">${text}</p>
+                </div>
+            </div>
+        `;
+    }
+    
+    messagesContainer.appendChild(messageDiv);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+
+// Handle Enter key in quick chat
+document.getElementById('quick-chat-input').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        sendQuickMessage();
+    }
+});
+
+// Action functions
+function setupWeatherAlerts() {
+    showNotification('Weather alerts setup feature coming soon!', 'info');
+}
+
+function viewMarketPrices() {
+    showNotification('Market prices feature coming soon!', 'info');
+}
+
+function updateFarmingInterests() {
+    showNotification('Update farming interests feature coming soon!', 'info');
+}
+
+// Upload modal functions
+function showUploadModal() {
+    document.getElementById('upload-modal').classList.remove('hidden');
+    document.getElementById('upload-modal').classList.add('flex');
+}
+
+function hideUploadModal() {
+    document.getElementById('upload-modal').classList.add('hidden');
+    document.getElementById('upload-modal').classList.remove('flex');
+}
+
+// Upload form submission
+document.getElementById('upload-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const submitBtn = this.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+    
+    showLoading(submitBtn);
+    
+    fetch('/api/upload-document', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        hideLoading(submitBtn, originalText);
+        
+        if (data.message) {
+            showNotification(data.message, 'success');
+            hideUploadModal();
+            this.reset();
+            
+            // Refresh page to show updated stats
+            setTimeout(() => location.reload(), 1000);
+        } else {
+            showNotification(data.error || 'Upload failed', 'error');
+        }
+    })
+    .catch(error => {
+        hideLoading(submitBtn, originalText);
+        showNotification('Upload failed. Please try again.', 'error');
+        console.error('Upload error:', error);
+    });
+});
+
+// Authentication and initialization
+let authToken = localStorage.getItem('authToken');
+let currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+
+async function loadUserData() {
+    if (!authToken || !currentUser) {
+        window.location.href = '/';
+        return;
+    }
+    
+    try {
+        // Verify token is still valid
+        const response = await fetch('/api/verify-token', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ token: authToken })
+        });
+        
+        if (!response.ok) {
+            // Token invalid, redirect to login
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('currentUser');
+            window.location.href = '/';
+            return;
+        }
+        
+        const data = await response.json();
+        currentUser = data.user;
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        
+        // Update UI with user data
+        updateDashboardUI();
+        
+        // Load farming interests if available
+        loadFarmingInterests();
+        
+    } catch (error) {
+        console.error('Auth verification error:', error);
+        window.location.href = '/';
+    }
+}
+
+function updateDashboardUI() {
+    // Update user name
+    const nameElements = document.querySelectorAll('.user-name');
+    nameElements.forEach(el => el.textContent = currentUser.name);
+    
+    // Update location
+    const locationElements = document.querySelectorAll('.user-location');
+    locationElements.forEach(el => el.textContent = currentUser.location);
+    
+    // Update language
+    const languageElements = document.querySelectorAll('.user-language');
+    languageElements.forEach(el => el.textContent = currentUser.preferred_language.toUpperCase());
+    
+    // Update welcome message
+    document.querySelector('.welcome-message').textContent = `Welcome back, ${currentUser.name}! 🌾`;
+    
+    // Update quick chat welcome message
+    const quickChatWelcome = document.getElementById('welcome-message');
+    if (quickChatWelcome) {
+        quickChatWelcome.textContent = `Hello ${currentUser.name}!`;
+    }
+    
+    // Update member since
+    const memberSince = new Date(currentUser.created_at);
+    const options = { year: 'numeric', month: 'short' };
+    document.getElementById('member-since').textContent = memberSince.toLocaleDateString('en-US', options);
+    
+    // Update farm size if available
+    if (currentUser.farm_size) {
+        document.getElementById('farm-size-info').style.display = 'flex';
+        document.querySelector('.user-farm-size').textContent = currentUser.farm_size;
+    }
+    
+    // Update statistics
+    updateStatistics();
+}
+
+async function updateStatistics() {
+    try {
+        // Get user statistics
+        const response = await fetch('/api/user/stats', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${authToken}`
+            }
+        });
+        
+        if (response.ok) {
+            const stats = await response.json();
+            document.getElementById('conversations-count').textContent = stats.conversations || 0;
+            document.getElementById('documents-count').textContent = stats.documents || 0;
+            document.getElementById('alerts-count').textContent = stats.active_alerts || 0;
+        } else {
+            // Use default values
+            document.getElementById('conversations-count').textContent = '0';
+            document.getElementById('documents-count').textContent = '0';
+            document.getElementById('alerts-count').textContent = '0';
+        }
+    } catch (error) {
+        console.error('Statistics update error:', error);
+        // Use default values
+        document.getElementById('conversations-count').textContent = '0';
+        document.getElementById('documents-count').textContent = '0';
+        document.getElementById('alerts-count').textContent = '0';
+    }
+}
+
+async function loadRecentActivity() {
+    try {
+        // For now, show placeholder since we don't have a conversations API
+        const activityContainer = document.getElementById('recent-activity');
+        activityContainer.innerHTML = `
+            <div class="text-center py-8">
+                <i class="fas fa-comments text-gray-300 text-4xl mb-4"></i>
+                <p class="text-gray-500">No conversations yet. Start chatting to see your activity here!</p>
+                <a href="/chat" class="inline-block mt-4 bg-agri-green-500 text-white px-6 py-2 rounded-xl hover:bg-agri-green-600 transition-colors">
+                    Start Chatting
+                </a>
+            </div>
+        `;
+    } catch (error) {
+        console.error('Failed to load recent activity:', error);
+        document.getElementById('recent-activity').innerHTML = `
+            <div class="text-center py-8">
+                <i class="fas fa-exclamation-triangle text-gray-300 text-4xl mb-4"></i>
+                <p class="text-gray-500">Unable to load recent activity</p>
+            </div>
+        `;
+    }
+}
+
+function loadFarmingInterests() {
+    // For now, show some example interests since we don't have this data in the user object
+    const sampleInterests = ['Maize', 'Rice', 'Cassava', 'Yam', 'Plantain'];
+    const section = document.getElementById('farming-interests-section');
+    const list = document.getElementById('farming-interests-list');
+    
+    if (sampleInterests && sampleInterests.length > 0) {
+        list.innerHTML = sampleInterests.map(crop => `
+            <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-agri-green-100 text-agri-green-800">
+                <i class="fas fa-leaf mr-2"></i>
+                ${crop}
+            </span>
+        `).join('');
+        section.style.display = 'block';
+    }
+}
+
+function logout() {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('currentUser');
+    window.location.href = '/';
+}
+
+// Initialize page
+document.addEventListener('DOMContentLoaded', function() {
+    loadUserData();
+    loadRecentActivity();
+});
+</script>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Dashboard-specific JavaScript
+document.addEventListener('DOMContentLoaded', function() {
+    // Auto-refresh stats every 5 minutes
+    setInterval(function() {
+        fetch('/api/user/stats', {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Update stats if needed
+            console.log('Stats updated:', data);
+        })
+        .catch(error => console.error('Stats update error:', error));
+    }, 300000); // 5 minutes
+});
+</script>
+{% endblock %}

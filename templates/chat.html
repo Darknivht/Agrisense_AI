@@ -1,0 +1,362 @@
+{% extends "base.html" %}
+
+{% block title %}Chat - AgriSense AI{% endblock %}
+
+{% block content %}
+<!-- Navigation Bar -->
+<nav class="bg-white shadow-lg border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+            <div class="flex items-center">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-agri-green-500 to-agri-blue-500 flex items-center justify-center">
+                        <i class="fas fa-seedling text-white text-lg"></i>
+                    </div>
+                    <span class="text-xl font-bold text-gray-900">AgriSense AI</span>
+                </div>
+                
+                <div class="hidden md:block ml-10">
+                    <div class="flex items-baseline space-x-4">
+                        <a href="/dashboard" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
+                            Dashboard
+                        </a>
+                        <a href="/chat" class="bg-agri-green-100 text-agri-green-700 px-3 py-2 rounded-md text-sm font-medium">
+                            Chat
+                        </a>
+                        <a href="/settings" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
+                            Settings
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <span class="user-name text-gray-700 font-medium">Loading...</span>
+                <button onclick="logout()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="particle-bg relative pt-20">
+    <div class="max-w-4xl mx-auto px-4 py-8 relative z-10">
+        
+        <!-- Chat Header -->
+        <div class="glass-card rounded-2xl mb-6 p-6 animate-slide-up">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold text-white mb-2 text-gradient">AI Agricultural Assistant 🌾</h1>
+                    <p class="text-white/80">Ask me anything about farming, crops, weather, or agricultural best practices</p>
+                </div>
+                <div class="hidden md:block">
+                    <div class="w-16 h-16 rounded-full bg-gradient-to-br from-agri-green-500 to-agri-blue-500 flex items-center justify-center">
+                        <i class="fas fa-robot text-white text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Language Selector -->
+            <div class="mt-4 flex items-center space-x-4">
+                <label class="text-sm font-medium text-gray-700">Language:</label>
+                <select id="chatLanguage" class="form-input text-sm">
+                    <option value="en">English</option>
+                    <option value="ha">Hausa</option>
+                    <option value="yo">Yoruba</option>
+                    <option value="ig">Igbo</option>
+                    <option value="ff">Fulfulde</option>
+                </select>
+            </div>
+        </div>
+        
+        <!-- Chat Messages Container -->
+        <div class="glass-card rounded-2xl mb-6 animate-fade-in">
+            <div id="chatMessages" class="h-96 overflow-y-auto p-6 space-y-4">
+                <!-- Welcome message -->
+                <div class="flex items-start space-x-3 animate-slide-up">
+                    <div class="w-8 h-8 rounded-full glass float flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-robot text-white text-sm"></i>
+                    </div>
+                    <div class="glass rounded-lg p-4 max-w-md">
+                        <p class="text-white/90">
+                            Welcome! I'm your AI agricultural assistant. I can help you with:
+                            <br>• Crop management and farming advice
+                            <br>• Weather information and alerts  
+                            <br>• Pest and disease identification
+                            <br>• Best agricultural practices
+                            <br><br>How can I help you today?
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Chat Input -->
+        <div class="glass-card rounded-2xl p-6">
+            <form id="chatForm" class="flex space-x-4">
+                <div class="flex-1">
+                    <textarea 
+                        id="messageInput" 
+                        class="form-input w-full resize-none bg-white/20 border-white/30 text-white placeholder-white/60" 
+                        rows="2" 
+                        placeholder="Type your farming question here..."
+                        required
+                    ></textarea>
+                </div>
+                <button 
+                    type="submit" 
+                    class="btn-3d px-8 py-3 rounded-xl self-end font-bold ripple"
+                    id="sendButton"
+                >
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </form>
+            
+            <!-- Quick Actions -->
+            <div class="mt-4 pt-4 border-t border-gray-200">
+                <p class="text-sm text-gray-600 mb-3">Quick questions:</p>
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="sendQuickMessage('What crops grow well in my location?')" class="quick-action-btn">
+                        🌱 Best crops for my area
+                    </button>
+                    <button onclick="sendQuickMessage('What is the weather forecast for my location?')" class="quick-action-btn">
+                        🌤️ Weather forecast
+                    </button>
+                    <button onclick="sendQuickMessage('How do I prepare my soil for planting?')" class="quick-action-btn">
+                        🌍 Soil preparation
+                    </button>
+                    <button onclick="sendQuickMessage('What are the signs of plant diseases?')" class="quick-action-btn">
+                        🦠 Disease identification
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.quick-action-btn {
+    @apply text-sm px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-gray-700 transition-colors;
+}
+
+.user-message {
+    @apply bg-agri-green-100 text-agri-green-800 ml-auto;
+}
+
+.ai-message {
+    @apply bg-gray-50 text-gray-700;
+}
+
+.message-content {
+    @apply rounded-lg p-4 max-w-md break-words;
+}
+</style>
+
+<script>
+// Authentication and user data
+let authToken = localStorage.getItem('authToken');
+let currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+
+// Check authentication on page load
+async function checkAuthentication() {
+    if (!authToken || !currentUser) {
+        window.location.href = '/';
+        return false;
+    }
+    
+    try {
+        // Verify token is still valid
+        const response = await fetch('/api/verify-token', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ token: authToken })
+        });
+        
+        if (!response.ok) {
+            // Token invalid, redirect to login
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('currentUser');
+            window.location.href = '/';
+            return false;
+        }
+        
+        const data = await response.json();
+        currentUser = data.user;
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        
+        // Update UI with user data
+        updateUserUI();
+        return true;
+        
+    } catch (error) {
+        console.error('Auth verification error:', error);
+        window.location.href = '/';
+        return false;
+    }
+}
+
+function updateUserUI() {
+    // Update user name in navigation
+    const nameElements = document.querySelectorAll('.user-name');
+    nameElements.forEach(el => el.textContent = currentUser.name);
+    
+    // Set language selector to user's preferred language
+    const languageSelect = document.getElementById('chatLanguage');
+    languageSelect.value = currentUser.preferred_language;
+}
+
+function logout() {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('currentUser');
+    window.location.href = '/';
+}
+
+// Chat functionality
+document.getElementById('chatForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const messageInput = document.getElementById('messageInput');
+    const message = messageInput.value.trim();
+    
+    if (!message) return;
+    
+    // Clear input and add user message to chat
+    messageInput.value = '';
+    addMessageToChat(message, 'user');
+    
+    // Show AI typing indicator
+    const typingIndicator = addTypingIndicator();
+    
+    try {
+        const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`
+            },
+            body: JSON.stringify({ 
+                message: message,
+                language: document.getElementById('chatLanguage').value
+            })
+        });
+        
+        const data = await response.json();
+        
+        // Remove typing indicator
+        typingIndicator.remove();
+        
+        if (response.ok) {
+            addMessageToChat(data.response, 'ai');
+        } else {
+            addMessageToChat(data.error || 'Sorry, I encountered an error. Please try again.', 'ai', true);
+        }
+        
+    } catch (error) {
+        console.error('Chat error:', error);
+        typingIndicator.remove();
+        addMessageToChat('Network error. Please check your connection and try again.', 'ai', true);
+    }
+});
+
+function addMessageToChat(message, sender, isError = false) {
+    const chatMessages = document.getElementById('chatMessages');
+    const messageDiv = document.createElement('div');
+    
+    if (sender === 'user') {
+        messageDiv.innerHTML = `
+            <div class="flex items-start space-x-3 justify-end">
+                <div class="message-content user-message">
+                    <p>${escapeHtml(message)}</p>
+                </div>
+                <div class="w-8 h-8 rounded-full bg-agri-green-500 flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-user text-white text-sm"></i>
+                </div>
+            </div>
+        `;
+    } else {
+        messageDiv.innerHTML = `
+            <div class="flex items-start space-x-3">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-agri-green-500 to-agri-blue-500 flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-robot text-white text-sm"></i>
+                </div>
+                <div class="message-content ai-message ${isError ? 'bg-red-50 text-red-700' : ''}">
+                    <p>${formatAIResponse(message)}</p>
+                </div>
+            </div>
+        `;
+    }
+    
+    chatMessages.appendChild(messageDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function addTypingIndicator() {
+    const chatMessages = document.getElementById('chatMessages');
+    const typingDiv = document.createElement('div');
+    
+    typingDiv.innerHTML = `
+        <div class="flex items-start space-x-3">
+            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-agri-green-500 to-agri-blue-500 flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-robot text-white text-sm"></i>
+            </div>
+            <div class="message-content ai-message">
+                <div class="flex space-x-1">
+                    <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                    <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
+                    <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    chatMessages.appendChild(typingDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    
+    return typingDiv;
+}
+
+function sendQuickMessage(message) {
+    document.getElementById('messageInput').value = message;
+    document.getElementById('chatForm').dispatchEvent(new Event('submit'));
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function formatAIResponse(text) {
+    // Simple formatting for AI responses
+    return escapeHtml(text)
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\n/g, '<br>');
+}
+
+// Handle Enter key in textarea (Shift+Enter for new line)
+document.getElementById('messageInput').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        document.getElementById('chatForm').dispatchEvent(new Event('submit'));
+    }
+});
+
+// Auto-resize textarea
+document.getElementById('messageInput').addEventListener('input', function(e) {
+    e.target.style.height = 'auto';
+    e.target.style.height = Math.min(e.target.scrollHeight, 120) + 'px';
+});
+
+// Initialize page
+document.addEventListener('DOMContentLoaded', async function() {
+    const isAuthenticated = await checkAuthentication();
+    if (isAuthenticated) {
+        // Focus on message input
+        document.getElementById('messageInput').focus();
+    }
+});
+</script>
+{% endblock %}

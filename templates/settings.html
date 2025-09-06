@@ -1,0 +1,627 @@
+{% extends "base.html" %}
+
+{% block title %}Settings - AgriSense AI{% endblock %}
+
+{% block content %}
+<!-- Navigation Bar -->
+<nav class="bg-white shadow-lg border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+            <div class="flex items-center">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-agri-green-500 to-agri-blue-500 flex items-center justify-center">
+                        <i class="fas fa-seedling text-white text-lg"></i>
+                    </div>
+                    <span class="text-xl font-bold text-gray-900">AgriSense AI</span>
+                </div>
+                
+                <div class="hidden md:block ml-10">
+                    <div class="flex items-baseline space-x-4">
+                        <a href="/dashboard" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
+                            Dashboard
+                        </a>
+                        <a href="/chat" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
+                            Chat
+                        </a>
+                        <a href="/settings" class="bg-agri-green-100 text-agri-green-700 px-3 py-2 rounded-md text-sm font-medium">
+                            Settings
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <span class="user-name text-gray-700 font-medium">Loading...</span>
+                <button onclick="logout()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div class="max-w-4xl mx-auto px-4 py-8">
+        
+        <!-- Settings Header -->
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 mb-6 p-6">
+            <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-agri-green-500 to-agri-blue-500 flex items-center justify-center">
+                    <i class="fas fa-cog text-white text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">Settings</h1>
+                    <p class="text-gray-600">Customize your AgriSense AI experience</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Settings Content -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- Settings Menu -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+                    <nav class="space-y-2">
+                        <button onclick="showSection('ai-provider')" class="settings-nav-btn w-full text-left px-4 py-3 rounded-xl hover:bg-gray-50 transition-colors flex items-center space-x-3 active">
+                            <i class="fas fa-robot text-agri-green-500"></i>
+                            <span>AI Assistant</span>
+                        </button>
+                        <button onclick="showSection('language')" class="settings-nav-btn w-full text-left px-4 py-3 rounded-xl hover:bg-gray-50 transition-colors flex items-center space-x-3">
+                            <i class="fas fa-language text-agri-blue-500"></i>
+                            <span>Language</span>
+                        </button>
+                        <button onclick="showSection('profile')" class="settings-nav-btn w-full text-left px-4 py-3 rounded-xl hover:bg-gray-50 transition-colors flex items-center space-x-3">
+                            <i class="fas fa-user text-purple-500"></i>
+                            <span>Profile</span>
+                        </button>
+                        <button onclick="showSection('notifications')" class="settings-nav-btn w-full text-left px-4 py-3 rounded-xl hover:bg-gray-50 transition-colors flex items-center space-x-3">
+                            <i class="fas fa-bell text-amber-500"></i>
+                            <span>Notifications</span>
+                        </button>
+                    </nav>
+                </div>
+            </div>
+            
+            <!-- Settings Content -->
+            <div class="lg:col-span-2">
+                
+                <!-- AI Provider Settings -->
+                <div id="ai-provider-section" class="settings-section bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <i class="fas fa-robot text-2xl text-agri-green-500"></i>
+                        <div>
+                            <h2 class="text-xl font-bold text-gray-900">AI Assistant Provider</h2>
+                            <p class="text-gray-600">Choose your preferred AI assistant for agricultural advice</p>
+                        </div>
+                    </div>
+                    
+                    <div id="ai-providers-list" class="space-y-4">
+                        <!-- AI providers will be loaded here -->
+                        <div class="text-center py-8">
+                            <i class="fas fa-spinner fa-spin text-gray-300 text-4xl mb-4"></i>
+                            <p class="text-gray-500">Loading AI providers...</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 p-4 bg-blue-50 rounded-xl">
+                        <div class="flex items-start space-x-3">
+                            <i class="fas fa-info-circle text-blue-500 mt-1"></i>
+                            <div>
+                                <p class="text-sm text-blue-700 font-medium">About AI Providers</p>
+                                <p class="text-sm text-blue-600 mt-1">Different AI providers offer unique strengths. You can switch between them anytime to find the one that works best for your farming needs.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Language Settings -->
+                <div id="language-section" class="settings-section bg-white rounded-2xl shadow-lg border border-gray-100 p-6 hidden">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <i class="fas fa-language text-2xl text-agri-blue-500"></i>
+                        <div>
+                            <h2 class="text-xl font-bold text-gray-900">Language Preferences</h2>
+                            <p class="text-gray-600">Set your preferred language for the interface and AI responses</p>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Interface Language</label>
+                            <select id="interfaceLanguage" class="form-input">
+                                <option value="en">English</option>
+                                <option value="ha">Hausa</option>
+                                <option value="yo">Yoruba</option>
+                                <option value="ig">Igbo</option>
+                                <option value="ff">Fulfulde</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">AI Response Language</label>
+                            <select id="aiLanguage" class="form-input">
+                                <option value="en">English</option>
+                                <option value="ha">Hausa</option>
+                                <option value="yo">Yoruba</option>
+                                <option value="ig">Igbo</option>
+                                <option value="ff">Fulfulde</option>
+                            </select>
+                        </div>
+                        
+                        <button onclick="saveLanguageSettings()" class="btn-gradient px-6 py-3 rounded-xl font-medium">
+                            Save Language Settings
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Profile Settings -->
+                <div id="profile-section" class="settings-section bg-white rounded-2xl shadow-lg border border-gray-100 p-6 hidden">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <i class="fas fa-user text-2xl text-purple-500"></i>
+                        <div>
+                            <h2 class="text-xl font-bold text-gray-900">Profile Settings</h2>
+                            <p class="text-gray-600">Update your personal information and farming details</p>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                            <input type="text" id="profileName" class="form-input" placeholder="Your full name">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Location</label>
+                            <input type="text" id="profileLocation" class="form-input" placeholder="Your farming location">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Farm Size (Hectares)</label>
+                            <input type="number" id="profileFarmSize" class="form-input" placeholder="0.0" step="0.1">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Farming Experience (Years)</label>
+                            <input type="number" id="profileExperience" class="form-input" placeholder="0">
+                        </div>
+                        
+                        <button onclick="saveProfileSettings()" class="btn-gradient px-6 py-3 rounded-xl font-medium">
+                            Save Profile Settings
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Notifications Settings -->
+                <div id="notifications-section" class="settings-section bg-white rounded-2xl shadow-lg border border-gray-100 p-6 hidden">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <i class="fas fa-bell text-2xl text-amber-500"></i>
+                        <div>
+                            <h2 class="text-xl font-bold text-gray-900">Notification Preferences</h2>
+                            <p class="text-gray-600">Configure how you receive alerts and updates</p>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="font-medium text-gray-900">Weather Alerts</h3>
+                                <p class="text-sm text-gray-600">Get notified about important weather changes</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="weatherAlerts" class="sr-only peer">
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                            </label>
+                        </div>
+                        
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="font-medium text-gray-900">Market Price Updates</h3>
+                                <p class="text-sm text-gray-600">Receive updates on crop prices</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="marketAlerts" class="sr-only peer">
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                            </label>
+                        </div>
+                        
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="font-medium text-gray-900">Farming Tips</h3>
+                                <p class="text-sm text-gray-600">Get regular agricultural advice</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="farmingTips" class="sr-only peer">
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                            </label>
+                        </div>
+                        
+                        <button onclick="saveNotificationSettings()" class="btn-gradient px-6 py-3 rounded-xl font-medium">
+                            Save Notification Settings
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.settings-nav-btn.active {
+    @apply bg-agri-green-100 text-agri-green-700;
+}
+
+.ai-provider-card {
+    @apply border-2 border-gray-200 rounded-xl p-4 cursor-pointer transition-all hover:border-agri-green-300;
+}
+
+.ai-provider-card.selected {
+    @apply border-agri-green-500 bg-agri-green-50;
+}
+
+.ai-provider-card .provider-badge {
+    @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800;
+}
+
+.ai-provider-card.selected .provider-badge {
+    @apply bg-agri-green-100 text-agri-green-800;
+}
+
+.models-section {
+    @apply border-t border-gray-200 pt-4 mt-4;
+}
+
+.model-option {
+    @apply transition-all duration-200;
+}
+
+.model-option:hover {
+    @apply bg-gray-50;
+}
+
+.model-option input[type="radio"]:checked + .flex-1 {
+    @apply text-gray-900 font-medium;
+}
+
+.btn-primary {
+    @apply bg-agri-green-500 hover:bg-agri-green-600 text-white transition-colors;
+}
+
+.hidden {
+    display: none !important;
+}
+</style>
+
+<script>
+// Authentication and user data
+let authToken = localStorage.getItem('authToken');
+let currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+let availableProviders = [];
+
+// Check authentication on page load
+async function checkAuthentication() {
+    if (!authToken || !currentUser) {
+        window.location.href = '/';
+        return false;
+    }
+    
+    try {
+        const response = await fetch('/api/verify-token', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ token: authToken })
+        });
+        
+        if (!response.ok) {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('currentUser');
+            window.location.href = '/';
+            return false;
+        }
+        
+        const data = await response.json();
+        currentUser = data.user;
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        
+        updateUserUI();
+        return true;
+        
+    } catch (error) {
+        console.error('Auth verification error:', error);
+        window.location.href = '/';
+        return false;
+    }
+}
+
+function updateUserUI() {
+    const nameElements = document.querySelectorAll('.user-name');
+    nameElements.forEach(el => el.textContent = currentUser.name);
+    
+    // Load current settings
+    loadCurrentSettings();
+}
+
+async function loadCurrentSettings() {
+    // Load AI providers
+    await loadAIProviders();
+    
+    // Set current language settings
+    document.getElementById('interfaceLanguage').value = currentUser.preferred_language;
+    document.getElementById('aiLanguage').value = currentUser.preferred_language;
+    
+    // Set current profile settings
+    document.getElementById('profileName').value = currentUser.name;
+    document.getElementById('profileLocation').value = currentUser.location;
+    document.getElementById('profileFarmSize').value = currentUser.farm_size || '';
+    document.getElementById('profileExperience').value = currentUser.farming_experience || '';
+}
+
+async function loadAIProviders() {
+    try {
+        const response = await fetch('/api/ai/providers', {
+            headers: {
+                'Authorization': `Bearer ${authToken}`
+            }
+        });
+        
+        const data = await response.json();
+        availableProviders = data.providers;
+        
+        const container = document.getElementById('ai-providers-list');
+        container.innerHTML = availableProviders.map(provider => {
+            const isSelected = currentUser.preferred_ai_provider === provider.id;
+            
+            // Group models by category for OpenRouter
+            const freeModels = provider.models?.filter(m => m.cost === 'Free' || m.category === 'free') || [];
+            const paidModels = provider.models?.filter(m => m.cost !== 'Free' && m.category !== 'free') || [];
+            
+            return `
+                <div class="ai-provider-card ${isSelected ? 'selected' : ''}" data-provider="${provider.id}">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex-1">
+                            <div class="flex items-center space-x-3 mb-2">
+                                <i class="fas fa-robot text-agri-green-500"></i>
+                                <h3 class="font-medium text-gray-900">${provider.name}</h3>
+                                <span class="provider-badge">${provider.status}</span>
+                            </div>
+                            <p class="text-sm text-gray-600">${provider.description}</p>
+                        </div>
+                        <div class="ml-4">
+                            <div class="w-6 h-6 rounded-full border-2 ${isSelected ? 'border-agri-green-500 bg-agri-green-500' : 'border-gray-300'} flex items-center justify-center">
+                                ${isSelected ? '<i class="fas fa-check text-white text-xs"></i>' : ''}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    ${provider.models && provider.models.length > 0 ? `
+                        <div class="models-section ${isSelected ? '' : 'hidden'}">
+                            <h4 class="text-sm font-medium text-gray-700 mb-3">Available Models:</h4>
+                            
+                            ${freeModels.length > 0 ? `
+                                <div class="mb-4">
+                                    <h5 class="text-xs font-medium text-green-600 mb-2 flex items-center">
+                                        <i class="fas fa-gift mr-1"></i> Free Models
+                                    </h5>
+                                    <div class="space-y-2">
+                                        ${freeModels.map(model => `
+                                            <label class="model-option flex items-center space-x-3 p-3 rounded-lg border border-gray-200 hover:border-green-300 cursor-pointer transition-colors">
+                                                <input type="radio" name="model-${provider.id}" value="${model.id}" 
+                                                       ${currentUser.preferred_ai_model === model.id ? 'checked' : ''} 
+                                                       class="text-green-500 focus:ring-green-500">
+                                                <div class="flex-1">
+                                                    <div class="flex items-center space-x-2">
+                                                        <span class="font-medium text-sm">${model.name}</span>
+                                                        <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">FREE</span>
+                                                    </div>
+                                                    <p class="text-xs text-gray-500 mt-1">${model.description}</p>
+                                                </div>
+                                            </label>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            ` : ''}
+                            
+                            ${paidModels.length > 0 ? `
+                                <div>
+                                    <h5 class="text-xs font-medium text-blue-600 mb-2 flex items-center">
+                                        <i class="fas fa-star mr-1"></i> Premium Models
+                                    </h5>
+                                    <div class="space-y-2">
+                                        ${paidModels.map(model => `
+                                            <label class="model-option flex items-center space-x-3 p-3 rounded-lg border border-gray-200 hover:border-blue-300 cursor-pointer transition-colors">
+                                                <input type="radio" name="model-${provider.id}" value="${model.id}" 
+                                                       ${currentUser.preferred_ai_model === model.id ? 'checked' : ''} 
+                                                       class="text-blue-500 focus:ring-blue-500">
+                                                <div class="flex-1">
+                                                    <div class="flex items-center space-x-2">
+                                                        <span class="font-medium text-sm">${model.name}</span>
+                                                        <span class="text-xs ${model.cost === 'High' ? 'bg-red-100 text-red-800' : model.cost === 'Medium' ? 'bg-yellow-100 text-yellow-800' : 'bg-blue-100 text-blue-800'} px-2 py-1 rounded-full">${model.cost.toUpperCase()}</span>
+                                                    </div>
+                                                    <p class="text-xs text-gray-500 mt-1">${model.description}</p>
+                                                </div>
+                                            </label>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            ` : ''}
+                            
+                            <div class="mt-4 flex space-x-3">
+                                <button onclick="selectProvider('${provider.id}')" class="btn-primary px-4 py-2 text-sm rounded-lg">
+                                    Select Provider
+                                </button>
+                                ${isSelected ? `
+                                    <button onclick="updateModel('${provider.id}')" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 text-sm rounded-lg transition-colors">
+                                        Update Model
+                                    </button>
+                                ` : ''}
+                            </div>
+                        </div>
+                    ` : `
+                        <div class="mt-4">
+                            <button onclick="selectProvider('${provider.id}')" class="btn-primary px-4 py-2 text-sm rounded-lg">
+                                Select Provider
+                            </button>
+                        </div>
+                    `}
+                </div>
+            `;
+        }).join('');
+        
+    } catch (error) {
+        console.error('Failed to load AI providers:', error);
+        document.getElementById('ai-providers-list').innerHTML = `
+            <div class="text-center py-8">
+                <i class="fas fa-exclamation-triangle text-gray-300 text-4xl mb-4"></i>
+                <p class="text-gray-500">Failed to load AI providers</p>
+            </div>
+        `;
+    }
+}
+
+async function selectProvider(providerId) {
+    try {
+        // Get the selected model for this provider
+        const selectedModelInput = document.querySelector(`input[name="model-${providerId}"]:checked`);
+        const selectedModel = selectedModelInput ? selectedModelInput.value : null;
+        
+        const requestBody = { provider: providerId };
+        if (selectedModel) {
+            requestBody.model = selectedModel;
+        }
+        
+        const response = await fetch('/api/user/ai-provider', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`
+            },
+            body: JSON.stringify(requestBody)
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            currentUser.preferred_ai_provider = providerId;
+            currentUser.preferred_ai_model = data.model;
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            // Refresh the providers display
+            loadAIProviders();
+            
+            showNotification('AI provider updated successfully!', 'success');
+        } else {
+            const errorData = await response.json();
+            showNotification(errorData.error || 'Failed to update AI provider', 'error');
+        }
+    } catch (error) {
+        console.error('Error updating AI provider:', error);
+        showNotification('Error updating AI provider', 'error');
+    }
+}
+
+async function updateModel(providerId) {
+    try {
+        // Get the selected model for this provider
+        const selectedModelInput = document.querySelector(`input[name="model-${providerId}"]:checked`);
+        
+        if (!selectedModelInput) {
+            showNotification('Please select a model first', 'warning');
+            return;
+        }
+        
+        const selectedModel = selectedModelInput.value;
+        
+        const response = await fetch('/api/user/ai-provider', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`
+            },
+            body: JSON.stringify({ 
+                provider: providerId,
+                model: selectedModel
+            })
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            currentUser.preferred_ai_model = data.model;
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            showNotification('AI model updated successfully!', 'success');
+        } else {
+            const errorData = await response.json();
+            showNotification(errorData.error || 'Failed to update AI model', 'error');
+        }
+    } catch (error) {
+        console.error('Error updating AI model:', error);
+        showNotification('Error updating AI model', 'error');
+    }
+}
+
+// Function to toggle model display when clicking on provider cards
+function toggleModels(providerId) {
+    const modelsSection = document.querySelector(`[data-provider="${providerId}"] .models-section`);
+    if (modelsSection) {
+        modelsSection.classList.toggle('hidden');
+    }
+}
+
+function showSection(sectionName) {
+    // Hide all sections
+    document.querySelectorAll('.settings-section').forEach(section => {
+        section.classList.add('hidden');
+    });
+    
+    // Remove active class from all nav buttons
+    document.querySelectorAll('.settings-nav-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    // Show selected section
+    document.getElementById(`${sectionName}-section`).classList.remove('hidden');
+    
+    // Add active class to clicked nav button
+    event.target.closest('.settings-nav-btn').classList.add('active');
+}
+
+function saveLanguageSettings() {
+    // Implementation for saving language settings
+    showNotification('Language settings saved!', 'success');
+}
+
+function saveProfileSettings() {
+    // Implementation for saving profile settings
+    showNotification('Profile settings saved!', 'success');
+}
+
+function saveNotificationSettings() {
+    // Implementation for saving notification settings
+    showNotification('Notification settings saved!', 'success');
+}
+
+function showNotification(message, type) {
+    // Simple notification system
+    const notification = document.createElement('div');
+    notification.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-xl shadow-lg text-white ${type === 'success' ? 'bg-green-500' : 'bg-red-500'}`;
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}
+
+function logout() {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('currentUser');
+    window.location.href = '/';
+}
+
+// Initialize page
+document.addEventListener('DOMContentLoaded', function() {
+    checkAuthentication();
+});
+</script>
+{% endblock %}

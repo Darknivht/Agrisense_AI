@@ -1,0 +1,962 @@
+{% extends "base.html" %}
+
+{% block title %}AgriSense AI - Smart Agricultural Intelligence for Nigerian Farmers{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <!-- Animated Background -->
+    <div class="absolute inset-0 gradient-bg"></div>
+    
+    <!-- Floating Icons Background -->
+    <div class="absolute inset-0 pointer-events-none">
+        <div class="absolute top-20 left-10 text-6xl text-white/10 animate-bounce-gentle">🌾</div>
+        <div class="absolute top-40 right-20 text-4xl text-white/10 animate-bounce-gentle" style="animation-delay: 2s;">🚜</div>
+        <div class="absolute bottom-40 left-20 text-5xl text-white/10 animate-bounce-gentle" style="animation-delay: 4s;">🌱</div>
+        <div class="absolute bottom-20 right-10 text-4xl text-white/10 animate-bounce-gentle" style="animation-delay: 6s;">🌽</div>
+        <div class="absolute top-1/3 left-1/3 text-3xl text-white/10 animate-bounce-gentle" style="animation-delay: 1s;">🥕</div>
+        <div class="absolute top-2/3 right-1/3 text-4xl text-white/10 animate-bounce-gentle" style="animation-delay: 3s;">🍅</div>
+    </div>
+    
+    <!-- Content -->
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div class="animate-fade-in">
+            <!-- Main Heading -->
+            <h1 class="text-5xl md:text-7xl font-black text-white mb-6 leading-tight">
+                <span class="block">AgriSense AI</span>
+                <span class="block text-3xl md:text-5xl font-semibold opacity-90">Smart Agricultural Intelligence</span>
+            </h1>
+            
+            <!-- Subtitle -->
+            <p class="text-xl md:text-2xl text-white/90 mb-8 max-w-4xl mx-auto leading-relaxed">
+                Empowering Nigerian farmers with AI-powered agricultural assistance, 
+                weather alerts, crop management, and market insights in your local language.
+            </p>
+            
+            <!-- Feature Badges -->
+            <div class="flex flex-wrap justify-center gap-4 mb-12">
+                <span class="glass px-6 py-3 rounded-full text-white font-medium animate-slide-up">
+                    🤖 AI-Powered
+                </span>
+                <span class="glass px-6 py-3 rounded-full text-white font-medium animate-slide-up" style="animation-delay: 0.1s;">
+                    🌍 Multi-Language
+                </span>
+                <span class="glass px-6 py-3 rounded-full text-white font-medium animate-slide-up" style="animation-delay: 0.2s;">
+                    📱 WhatsApp Integration
+                </span>
+                <span class="glass px-6 py-3 rounded-full text-white font-medium animate-slide-up" style="animation-delay: 0.3s;">
+                    🌤️ Weather Alerts
+                </span>
+                <span class="glass px-6 py-3 rounded-full text-white font-medium animate-slide-up" style="animation-delay: 0.4s;">
+                    💰 Market Prices
+                </span>
+            </div>
+            
+            <!-- CTA Buttons -->
+            <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
+                <button onclick="checkAuthAndScroll()" class="btn-hover-lift bg-white text-gray-900 px-8 py-4 rounded-full font-bold text-lg shadow-2xl hover:shadow-3xl transition-all">
+                    <i class="fas fa-comments mr-3"></i>
+                    Start Chatting Now
+                </button>
+                <button onclick="scrollToSection('features-section')" class="btn-hover-lift glass text-white px-8 py-4 rounded-full font-bold text-lg border-2 border-white/30 hover:border-white/50 transition-all">
+                    <i class="fas fa-play mr-3"></i>
+                    Learn More
+                </button>
+            </div>
+            
+            <!-- Auth Buttons -->
+            <div id="auth-buttons" class="flex gap-4 justify-center mt-8">
+                <button onclick="showLoginModal()" class="glass text-white px-6 py-3 rounded-full font-medium border border-white/30 hover:border-white/50 transition-all">
+                    <i class="fas fa-sign-in-alt mr-2"></i>
+                    Login
+                </button>
+                <button onclick="showRegistrationModal()" class="glass text-white px-6 py-3 rounded-full font-medium border border-white/30 hover:border-white/50 transition-all">
+                    <i class="fas fa-user-plus mr-2"></i>
+                    Register
+                </button>
+            </div>
+            
+            <!-- User Info (hidden by default) -->
+            <div id="user-info" class="mt-8 hidden">
+                <div class="glass p-4 rounded-2xl text-white">
+                    <p>Welcome back, <span id="user-name"></span>!</p>
+                    <button onclick="logout()" class="text-white/80 hover:text-white underline ml-4">
+                        <i class="fas fa-sign-out-alt mr-1"></i>
+                        Logout
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Language Support -->
+            <div class="mt-12">
+                <p class="text-white/80 mb-4">Available in multiple Nigerian languages:</p>
+                <div class="flex flex-wrap justify-center gap-6">
+                    <div class="flex items-center text-white/90">
+                        <span class="w-6 h-4 rounded-sm bg-gradient-to-r from-red-500 to-blue-500 mr-2"></span>
+                        <span class="font-medium">English</span>
+                    </div>
+                    <div class="flex items-center text-white/90">
+                        <span class="w-6 h-4 rounded-sm bg-gradient-to-r from-green-500 to-white mr-2"></span>
+                        <span class="font-medium">Hausa</span>
+                    </div>
+                    <div class="flex items-center text-white/90">
+                        <span class="w-6 h-4 rounded-sm bg-gradient-to-r from-green-500 to-white mr-2"></span>
+                        <span class="font-medium">Yoruba</span>
+                    </div>
+                    <div class="flex items-center text-white/90">
+                        <span class="w-6 h-4 rounded-sm bg-gradient-to-r from-green-500 to-white mr-2"></span>
+                        <span class="font-medium">Igbo</span>
+                    </div>
+                    <div class="flex items-center text-white/90">
+                        <span class="w-6 h-4 rounded-sm bg-gradient-to-r from-green-500 to-white mr-2"></span>
+                        <span class="font-medium">Fulfulde</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Scroll Indicator -->
+    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+        <i class="fas fa-chevron-down text-white text-2xl opacity-60"></i>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section id="features-section" class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Section Header -->
+        <div class="text-center mb-16">
+            <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                Powerful Features for 
+                <span class="text-gradient">Modern Farmers</span>
+            </h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                Discover how AgriSense AI is revolutionizing agriculture in Nigeria with 
+                cutting-edge technology and local expertise.
+            </p>
+        </div>
+        
+        <!-- Features Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- AI Chat Assistant -->
+            <div class="card-hover bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-agri-green-500 to-agri-green-600 flex items-center justify-center mb-6">
+                    <i class="fas fa-robot text-white text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-4">AI Chat Assistant</h3>
+                <p class="text-gray-600 mb-6">
+                    Get instant answers to your farming questions from our advanced AI system 
+                    trained on agricultural best practices.
+                </p>
+                <ul class="space-y-2 text-sm text-gray-600">
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-agri-green-500 mr-2"></i>
+                        Crop-specific advice
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-agri-green-500 mr-2"></i>
+                        Pest identification
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-agri-green-500 mr-2"></i>
+                        Soil management tips
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Weather Intelligence -->
+            <div class="card-hover bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-agri-blue-500 to-agri-blue-600 flex items-center justify-center mb-6">
+                    <i class="fas fa-cloud-sun text-white text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-4">Weather Intelligence</h3>
+                <p class="text-gray-600 mb-6">
+                    Receive real-time weather updates, forecasts, and agricultural alerts 
+                    tailored to your specific location.
+                </p>
+                <ul class="space-y-2 text-sm text-gray-600">
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-agri-blue-500 mr-2"></i>
+                        5-day forecasts
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-agri-blue-500 mr-2"></i>
+                        Rainfall alerts
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-agri-blue-500 mr-2"></i>
+                        Irrigation timing
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Market Insights -->
+            <div class="card-hover bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-agri-amber-500 to-agri-amber-600 flex items-center justify-center mb-6">
+                    <i class="fas fa-chart-line text-white text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-4">Market Insights</h3>
+                <p class="text-gray-600 mb-6">
+                    Stay informed about current market prices, trends, and the best times 
+                    to sell your produce for maximum profit.
+                </p>
+                <ul class="space-y-2 text-sm text-gray-600">
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-agri-amber-500 mr-2"></i>
+                        Live price updates
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-agri-amber-500 mr-2"></i>
+                        Market trends
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-agri-amber-500 mr-2"></i>
+                        Profit optimization
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Document Processing -->
+            <div class="card-hover bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center mb-6">
+                    <i class="fas fa-file-pdf text-white text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-4">Smart Documents</h3>
+                <p class="text-gray-600 mb-6">
+                    Upload agricultural documents and get instant insights. Our AI processes 
+                    PDFs to extract relevant farming knowledge.
+                </p>
+                <ul class="space-y-2 text-sm text-gray-600">
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-purple-500 mr-2"></i>
+                        PDF processing
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-purple-500 mr-2"></i>
+                        Knowledge extraction
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-purple-500 mr-2"></i>
+                        Instant answers
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Multi-Platform Integration -->
+            <div class="card-hover bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center mb-6">
+                    <i class="fab fa-whatsapp text-white text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-4">WhatsApp Integration</h3>
+                <p class="text-gray-600 mb-6">
+                    Access AgriSense AI directly through WhatsApp. No app installation needed - 
+                    just chat naturally in your preferred language.
+                </p>
+                <ul class="space-y-2 text-sm text-gray-600">
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-green-500 mr-2"></i>
+                        No app required
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-green-500 mr-2"></i>
+                        Natural chat interface
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-green-500 mr-2"></i>
+                        Instant notifications
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Voice Support -->
+            <div class="card-hover bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-500 to-pink-600 flex items-center justify-center mb-6">
+                    <i class="fas fa-microphone text-white text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-4">Voice Support</h3>
+                <p class="text-gray-600 mb-6">
+                    Communicate using voice messages in your local language. Perfect for 
+                    farmers who prefer speaking over typing.
+                </p>
+                <ul class="space-y-2 text-sm text-gray-600">
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-pink-500 mr-2"></i>
+                        Voice recognition
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-pink-500 mr-2"></i>
+                        Audio responses
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-pink-500 mr-2"></i>
+                        Local languages
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Chat Section -->
+<section id="chat-section" class="py-20 bg-gradient-to-br from-gray-50 to-gray-100">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Section Header -->
+        <div class="text-center mb-12">
+            <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                Try AgriSense AI
+                <span class="text-gradient">Right Now</span>
+            </h2>
+            <p class="text-xl text-gray-600">
+                Ask any question about farming, crops, weather, or market prices. 
+                Our AI is ready to help you succeed.
+            </p>
+        </div>
+        
+        <!-- Chat Interface -->
+        <div class="bg-white rounded-3xl shadow-2xl overflow-hidden">
+            <!-- Chat Header -->
+            <div class="bg-gradient-to-r from-agri-green-500 to-agri-blue-500 px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+                            <i class="fas fa-robot text-white"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-white font-semibold">AgriSense AI Assistant</h3>
+                            <p class="text-white/80 text-sm">Always ready to help</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-3 h-3 rounded-full bg-green-400 animate-pulse"></div>
+                        <span class="text-white/80 text-sm">Online</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Chat Messages -->
+            <div id="chat-messages" class="h-96 overflow-y-auto p-6 space-y-4">
+                <!-- Welcome Message -->
+                <div class="flex items-start space-x-3 message-enter">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-agri-green-500 to-agri-blue-500 flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-robot text-white text-sm"></i>
+                    </div>
+                    <div class="bg-gray-100 rounded-2xl rounded-tl-md px-4 py-3 max-w-xs">
+                        <p class="text-gray-800">
+                            Hello! I'm AgriSense AI. I can help you with farming questions, weather updates, 
+                            market prices, and more. What would you like to know?
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Sample Questions -->
+                <div class="flex justify-center">
+                    <div class="text-center">
+                        <p class="text-gray-500 text-sm mb-3">Try asking:</p>
+                        <div class="flex flex-wrap gap-2 justify-center">
+                            <button onclick="sendSampleMessage('What is the best time to plant rice?')" 
+                                    class="bg-agri-green-100 text-agri-green-700 px-3 py-1 rounded-full text-sm hover:bg-agri-green-200 transition-colors">
+                                Rice planting time
+                            </button>
+                            <button onclick="sendSampleMessage('How do I control tomato pests?')" 
+                                    class="bg-agri-blue-100 text-agri-blue-700 px-3 py-1 rounded-full text-sm hover:bg-agri-blue-200 transition-colors">
+                                Pest control
+                            </button>
+                            <button onclick="sendSampleMessage('What are current maize prices?')" 
+                                    class="bg-agri-amber-100 text-agri-amber-700 px-3 py-1 rounded-full text-sm hover:bg-agri-amber-200 transition-colors">
+                                Market prices
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Chat Input -->
+            <div class="border-t border-gray-200 p-4">
+                <div class="flex items-center space-x-3">
+                    <div class="flex-1 relative">
+                        <input type="text" 
+                               id="chat-input" 
+                               placeholder="Ask me anything about farming..." 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-agri-green-500 focus:border-transparent">
+                        <button onclick="toggleVoiceInput()" 
+                                class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-agri-green-500 transition-colors">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                    </div>
+                    <button onclick="sendMessage()" 
+                            id="send-button"
+                            class="btn-hover-lift bg-gradient-to-r from-agri-green-500 to-agri-blue-500 text-white px-6 py-3 rounded-full font-medium hover:shadow-lg transition-all">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="flex flex-wrap gap-2 mt-3">
+                    <button onclick="sendSampleMessage('What is the weather forecast for today?')" 
+                            class="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full hover:bg-gray-200 transition-colors">
+                        <i class="fas fa-cloud-sun mr-1"></i>Weather
+                    </button>
+                    <button onclick="sendSampleMessage('Show me crop calendar for this season')" 
+                            class="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full hover:bg-gray-200 transition-colors">
+                        <i class="fas fa-calendar mr-1"></i>Calendar
+                    </button>
+                    <button onclick="sendSampleMessage('What fertilizer should I use for cassava?')" 
+                            class="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full hover:bg-gray-200 transition-colors">
+                        <i class="fas fa-seedling mr-1"></i>Fertilizer
+                    </button>
+                    <button onclick="sendSampleMessage('How do I store my harvest properly?')" 
+                            class="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full hover:bg-gray-200 transition-colors">
+                        <i class="fas fa-warehouse mr-1"></i>Storage
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Registration Prompt -->
+        <div class="mt-8 text-center">
+            <p class="text-gray-600 mb-4">
+                Want to access advanced features and save your conversations?
+            </p>
+            <button onclick="showRegistrationModal()" 
+                    class="btn-hover-lift bg-gradient-to-r from-agri-green-500 to-agri-blue-500 text-white px-8 py-3 rounded-full font-semibold">
+                <i class="fas fa-user-plus mr-2"></i>
+                Register for Free
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl font-bold text-gray-900 mb-6">
+                Trusted by Farmers 
+                <span class="text-gradient">Across Nigeria</span>
+            </h2>
+            <p class="text-xl text-gray-600">
+                Join thousands of farmers already using AgriSense AI to improve their harvests
+            </p>
+        </div>
+        
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div class="text-center">
+                <div class="text-4xl md:text-5xl font-bold text-agri-green-600 mb-2" data-counter="15000">0</div>
+                <p class="text-gray-600 font-medium">Active Farmers</p>
+            </div>
+            <div class="text-center">
+                <div class="text-4xl md:text-5xl font-bold text-agri-blue-600 mb-2" data-counter="500000">0</div>
+                <p class="text-gray-600 font-medium">Questions Answered</p>
+            </div>
+            <div class="text-center">
+                <div class="text-4xl md:text-5xl font-bold text-agri-amber-600 mb-2" data-counter="36">0</div>
+                <p class="text-gray-600 font-medium">States Covered</p>
+            </div>
+            <div class="text-center">
+                <div class="text-4xl md:text-5xl font-bold text-purple-600 mb-2" data-counter="5">0</div>
+                <p class="text-gray-600 font-medium">Languages Supported</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Registration Modal -->
+<div id="registration-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-8 animate-fade-in">
+        <div class="text-center mb-6">
+            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-agri-green-500 to-agri-blue-500 flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-user-plus text-white text-2xl"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900">Join AgriSense AI</h3>
+            <p class="text-gray-600">Get personalized agricultural advice</p>
+        </div>
+        
+        <form id="registration-form" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                <input type="text" name="name" required 
+                       class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-agri-green-500 focus:border-transparent">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                <input type="tel" name="phone" required 
+                       class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-agri-green-500 focus:border-transparent"
+                       placeholder="+234 xxx xxx xxxx">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Location</label>
+                <input type="text" name="location" required 
+                       class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-agri-green-500 focus:border-transparent"
+                       placeholder="e.g., Kano, Nigeria">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Preferred Language</label>
+                <select name="language" 
+                        class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-agri-green-500 focus:border-transparent">
+                    <option value="en">English</option>
+                    <option value="ha">Hausa</option>
+                    <option value="yo">Yoruba</option>
+                    <option value="ig">Igbo</option>
+                    <option value="ff">Fulfulde</option>
+                </select>
+            </div>
+            
+            <div class="flex space-x-3 pt-4">
+                <button type="button" onclick="hideRegistrationModal()" 
+                        class="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-xl font-medium hover:bg-gray-50 transition-colors">
+                    Cancel
+                </button>
+                <button type="submit" 
+                        class="flex-1 bg-gradient-to-r from-agri-green-500 to-agri-blue-500 text-white px-4 py-3 rounded-xl font-medium hover:shadow-lg transition-all">
+                    Register
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Login Modal -->
+<div id="login-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-8 animate-fade-in">
+        <div class="text-center mb-6">
+            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-agri-blue-500 to-agri-green-500 flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-sign-in-alt text-white text-2xl"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900">Welcome Back</h3>
+            <p class="text-gray-600">Login to continue farming smarter</p>
+        </div>
+        
+        <form id="login-form" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                <input type="tel" name="phone" required 
+                       class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-agri-blue-500 focus:border-transparent"
+                       placeholder="+234 xxx xxx xxxx">
+            </div>
+            
+            <div class="flex space-x-3 pt-4">
+                <button type="button" onclick="hideLoginModal()" 
+                        class="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-xl font-medium hover:bg-gray-50 transition-colors">
+                    Cancel
+                </button>
+                <button type="submit" 
+                        class="flex-1 bg-gradient-to-r from-agri-blue-500 to-agri-green-500 text-white px-4 py-3 rounded-xl font-medium hover:shadow-lg transition-all">
+                    Login
+                </button>
+            </div>
+            
+            <div class="text-center pt-4">
+                <p class="text-gray-600">Don't have an account? 
+                    <button type="button" onclick="hideLoginModal(); showRegistrationModal();" class="text-agri-green-500 hover:text-agri-green-600 font-medium">
+                        Register here
+                    </button>
+                </p>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+// Global variables
+let isTyping = false;
+let authToken = localStorage.getItem('authToken');
+let currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+
+// Authentication functions
+function isAuthenticated() {
+    return authToken && currentUser;
+}
+
+function updateAuthUI() {
+    const authButtons = document.getElementById('auth-buttons');
+    const userInfo = document.getElementById('user-info');
+    const userName = document.getElementById('user-name');
+    
+    if (isAuthenticated()) {
+        authButtons.classList.add('hidden');
+        userInfo.classList.remove('hidden');
+        userName.textContent = currentUser.name;
+    } else {
+        authButtons.classList.remove('hidden');
+        userInfo.classList.add('hidden');
+    }
+}
+
+function checkAuthAndScroll() {
+    if (isAuthenticated()) {
+        scrollToSection('chat-section');
+    } else {
+        showNotification('Please login or register to start chatting', 'info');
+        showLoginModal();
+    }
+}
+
+function logout() {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('currentUser');
+    authToken = null;
+    currentUser = null;
+    updateAuthUI();
+    showNotification('Logged out successfully', 'success');
+}
+
+// Modal functions
+function showRegistrationModal() {
+    document.getElementById('registration-modal').classList.remove('hidden');
+    document.getElementById('registration-modal').classList.add('flex');
+}
+
+function hideRegistrationModal() {
+    document.getElementById('registration-modal').classList.add('hidden');
+    document.getElementById('registration-modal').classList.remove('flex');
+}
+
+function showLoginModal() {
+    document.getElementById('login-modal').classList.remove('hidden');
+    document.getElementById('login-modal').classList.add('flex');
+}
+
+function hideLoginModal() {
+    document.getElementById('login-modal').classList.add('hidden');
+    document.getElementById('login-modal').classList.remove('flex');
+}
+
+function scrollToSection(sectionId) {
+    document.getElementById(sectionId).scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+    });
+}
+
+function sendSampleMessage(message) {
+    document.getElementById('chat-input').value = message;
+    sendMessage();
+}
+
+async function sendMessage() {
+    const input = document.getElementById('chat-input');
+    const message = input.value.trim();
+    
+    if (!message) return;
+    
+    if (!isAuthenticated()) {
+        showNotification('Please login to send messages', 'warning');
+        showLoginModal();
+        return;
+    }
+    
+    // Add user message
+    addMessage(message, 'user');
+    input.value = '';
+    
+    // Show typing indicator
+    showTyping();
+    
+    try {
+        const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`
+            },
+            body: JSON.stringify({ message: message })
+        });
+        
+        const data = await response.json();
+        
+        hideTyping();
+        
+        if (response.ok) {
+            addMessage(data.response, 'ai');
+            
+            // Show sources if available
+            if (data.sources && data.sources.length > 0) {
+                setTimeout(() => {
+                    addMessage(`📚 Sources: ${data.sources.map(s => s.title || s).join(', ')}`, 'system');
+                }, 500);
+            }
+        } else {
+            addMessage('Sorry, I encountered an error. Please try again.', 'ai');
+            showNotification(data.error || 'Chat error occurred', 'error');
+        }
+    } catch (error) {
+        hideTyping();
+        addMessage('Sorry, I cannot connect to the server right now. Please check your internet connection.', 'ai');
+        showNotification('Connection error', 'error');
+        console.error('Chat error:', error);
+    }
+}
+
+function addMessage(text, sender) {
+    const messagesContainer = document.getElementById('chat-messages');
+    const messageDiv = document.createElement('div');
+    
+    if (sender === 'user') {
+        messageDiv.innerHTML = `
+            <div class="flex items-start space-x-3 justify-end message-enter">
+                <div class="bg-gradient-to-r from-agri-green-500 to-agri-blue-500 text-white rounded-2xl rounded-tr-md px-4 py-3 max-w-xs">
+                    <p>${text}</p>
+                </div>
+                <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-user text-gray-600 text-sm"></i>
+                </div>
+            </div>
+        `;
+    } else if (sender === 'system') {
+        messageDiv.innerHTML = `
+            <div class="flex justify-center message-enter">
+                <div class="bg-blue-50 border border-blue-200 rounded-xl px-4 py-2 max-w-md">
+                    <p class="text-blue-700 text-sm">${text}</p>
+                </div>
+            </div>
+        `;
+    } else {
+        messageDiv.innerHTML = `
+            <div class="flex items-start space-x-3 message-enter">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-agri-green-500 to-agri-blue-500 flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-robot text-white text-sm"></i>
+                </div>
+                <div class="bg-gray-100 rounded-2xl rounded-tl-md px-4 py-3 max-w-xs">
+                    <p class="text-gray-800">${text}</p>
+                </div>
+            </div>
+        `;
+    }
+    
+    messagesContainer.appendChild(messageDiv);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+
+function showTyping() {
+    if (isTyping) return;
+    isTyping = true;
+    
+    const messagesContainer = document.getElementById('chat-messages');
+    const typingDiv = document.createElement('div');
+    typingDiv.id = 'typing-indicator';
+    typingDiv.innerHTML = `
+        <div class="flex items-start space-x-3 message-enter">
+            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-agri-green-500 to-agri-blue-500 flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-robot text-white text-sm"></i>
+            </div>
+            <div class="bg-gray-100 rounded-2xl rounded-tl-md px-4 py-3">
+                <div class="flex space-x-1">
+                    <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                    <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
+                    <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    messagesContainer.appendChild(typingDiv);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+
+function hideTyping() {
+    isTyping = false;
+    const typingIndicator = document.getElementById('typing-indicator');
+    if (typingIndicator) {
+        typingIndicator.remove();
+    }
+}
+
+function generateSampleResponse(message) {
+    const responses = {
+        'rice': 'For rice cultivation in Nigeria, the best planting time is during the rainy season (May-July). Ensure your field has good drainage and use certified seeds. Apply NPK fertilizer at planting and urea for top-dressing.',
+        'tomato': 'Tomato pests can be controlled using integrated pest management. Try neem oil spray in the evening, introduce beneficial insects, and practice crop rotation. For severe infestations, use approved pesticides following label instructions.',
+        'maize': 'Current maize prices vary by location, but generally range from ₦280,000-₦320,000 per metric ton. Prices tend to be higher during off-season periods. Consider market timing for better profits.',
+        'weather': 'Today\'s weather forecast shows partly cloudy conditions with temperatures around 28-32°C. Light rainfall possible in the evening. Good conditions for most farming activities.',
+        'default': 'Thank you for your question! I\'m here to help with all your farming needs. You can ask me about crops, weather, market prices, pest control, soil management, and much more. What specific area would you like assistance with?'
+    };
+    
+    const lowerMessage = message.toLowerCase();
+    for (const [key, response] of Object.entries(responses)) {
+        if (lowerMessage.includes(key)) {
+            return response;
+        }
+    }
+    
+    return responses.default;
+}
+
+function toggleVoiceInput() {
+    // Voice input functionality would be implemented here
+    showNotification('Voice input feature coming soon!', 'info');
+}
+
+// Handle Enter key in chat input
+document.getElementById('chat-input').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        sendMessage();
+    }
+});
+
+// Registration modal functions
+function showRegistrationModal() {
+    document.getElementById('registration-modal').classList.remove('hidden');
+    document.getElementById('registration-modal').classList.add('flex');
+}
+
+function hideRegistrationModal() {
+    document.getElementById('registration-modal').classList.add('hidden');
+    document.getElementById('registration-modal').classList.remove('flex');
+}
+
+// Registration form submission
+document.getElementById('registration-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData);
+    
+    try {
+        const response = await fetch('/api/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok) {
+            // Store auth token and user data
+            authToken = result.access_token;
+            currentUser = result.user;
+            localStorage.setItem('authToken', authToken);
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            showNotification('Registration successful! Welcome to AgriSense AI!', 'success');
+            hideRegistrationModal();
+            updateAuthUI();
+            
+            // Auto-scroll to chat section
+            setTimeout(() => {
+                scrollToSection('chat-section');
+            }, 1000);
+        } else {
+            showNotification(result.error || 'Registration failed', 'error');
+        }
+        
+        // Clear form
+        this.reset();
+    } catch (error) {
+        showNotification('Connection error. Please try again.', 'error');
+        console.error('Registration error:', error);
+    }
+});
+
+// Login form submission
+document.getElementById('login-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData);
+    
+    try {
+        const response = await fetch('/api/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok) {
+            // Store auth token and user data
+            authToken = result.access_token;
+            currentUser = result.user;
+            localStorage.setItem('authToken', authToken);
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            showNotification(`Welcome back, ${currentUser.name}!`, 'success');
+            hideLoginModal();
+            updateAuthUI();
+            
+            // Auto-scroll to chat section
+            setTimeout(() => {
+                scrollToSection('chat-section');
+            }, 1000);
+        } else {
+            showNotification(result.error || 'Login failed', 'error');
+        }
+        
+        // Clear form
+        this.reset();
+    } catch (error) {
+        showNotification('Connection error. Please try again.', 'error');
+        console.error('Login error:', error);
+    }
+});
+
+// Counter animation
+function animateCounters() {
+    const counters = document.querySelectorAll('[data-counter]');
+    
+    counters.forEach(counter => {
+        const target = parseInt(counter.getAttribute('data-counter'));
+        const increment = target / 100;
+        let current = 0;
+        
+        const updateCounter = () => {
+            if (current < target) {
+                current += increment;
+                counter.textContent = Math.floor(current).toLocaleString();
+                requestAnimationFrame(updateCounter);
+            } else {
+                counter.textContent = target.toLocaleString();
+            }
+        };
+        
+        updateCounter();
+    });
+}
+
+// Intersection Observer for counter animation
+const observerOptions = {
+    threshold: 0.5
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            animateCounters();
+            observer.unobserve(entry.target);
+        }
+    });
+}, observerOptions);
+
+// Observe the stats section
+const statsSection = document.querySelector('[data-counter]')?.closest('section');
+if (statsSection) {
+    observer.observe(statsSection);
+}
+</script>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Additional JavaScript for index page specific functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize authentication UI
+    updateAuthUI();
+    
+    // Add welcome message for authenticated users
+    if (isAuthenticated()) {
+        console.log(`AgriSense AI - Welcome back, ${currentUser.name}!`);
+    } else {
+        console.log('AgriSense AI - Ready for new users');
+    }
+    
+    console.log('AgriSense AI - Index page loaded');
+});
+</script>
+{% endblock %}

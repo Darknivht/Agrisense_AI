@@ -1,0 +1,308 @@
+{% extends "base.html" %}
+
+{% block title %}Create Account - AgriSense AI{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+        <div class="text-center">
+            <div class="flex justify-center mb-6">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-agri-green-500 to-agri-blue-500 flex items-center justify-center">
+                    <i class="fas fa-seedling text-white text-2xl"></i>
+                </div>
+            </div>
+            <h2 class="text-3xl font-bold text-gray-900 mb-2">Join AgriSense AI</h2>
+            <p class="text-gray-600">Create your account and start farming smarter</p>
+        </div>
+        
+        <div class="bg-white rounded-2xl shadow-xl p-8">
+            <form id="registerForm" class="space-y-6">
+                <div>
+                    <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
+                        Full Name
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-user text-gray-400"></i>
+                        </div>
+                        <input 
+                            type="text" 
+                            id="name" 
+                            name="name" 
+                            class="form-input pl-10 w-full" 
+                            placeholder="Your full name"
+                            required
+                        >
+                    </div>
+                </div>
+                
+                <div>
+                    <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">
+                        Phone Number
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-phone text-gray-400"></i>
+                        </div>
+                        <input 
+                            type="tel" 
+                            id="phone" 
+                            name="phone" 
+                            class="form-input pl-10 w-full" 
+                            placeholder="e.g., 08123456789"
+                            required
+                        >
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1">We'll use this for important notifications</p>
+                </div>
+                
+                <div>
+                    <label for="location" class="block text-sm font-medium text-gray-700 mb-2">
+                        Location
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-map-marker-alt text-gray-400"></i>
+                        </div>
+                        <input 
+                            type="text" 
+                            id="location" 
+                            name="location" 
+                            class="form-input pl-10 w-full" 
+                            placeholder="e.g., Lagos, Nigeria"
+                            required
+                        >
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1">Helps us provide location-specific advice</p>
+                </div>
+                
+                <div>
+                    <label for="language" class="block text-sm font-medium text-gray-700 mb-2">
+                        Preferred Language
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-language text-gray-400"></i>
+                        </div>
+                        <select id="language" name="language" class="form-input pl-10 w-full" required>
+                            <option value="">Select your language</option>
+                            <option value="en">English</option>
+                            <option value="ha">Hausa (هَوُسَ)</option>
+                            <option value="yo">Yoruba (Èdè Yorùbá)</option>
+                            <option value="ig">Igbo (Asụsụ Igbo)</option>
+                            <option value="ff">Fulfulde (Fulfulde)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 rounded-lg p-4">
+                    <h4 class="text-sm font-medium text-gray-700 mb-2">Optional Information</h4>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="farmSize" class="block text-xs text-gray-600 mb-1">
+                                Farm Size (hectares)
+                            </label>
+                            <input 
+                                type="number" 
+                                id="farmSize" 
+                                name="farmSize" 
+                                class="form-input w-full text-sm" 
+                                placeholder="0.5"
+                                min="0.01"
+                                max="10000"
+                                step="0.1"
+                            >
+                        </div>
+                        
+                        <div>
+                            <label for="experience" class="block text-xs text-gray-600 mb-1">
+                                Years of Experience
+                            </label>
+                            <input 
+                                type="number" 
+                                id="experience" 
+                                name="experience" 
+                                class="form-input w-full text-sm" 
+                                placeholder="5"
+                                min="0"
+                                max="80"
+                            >
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn-gradient w-full py-4 rounded-xl font-bold">
+                    <i class="fas fa-user-plus mr-2"></i>
+                    Create Account
+                </button>
+            </form>
+            
+            <div class="mt-6 text-center">
+                <p class="text-gray-600">
+                    Already have an account? 
+                    <a href="/login" class="text-agri-green-600 hover:text-agri-green-700 font-medium">
+                        Sign in here
+                    </a>
+                </p>
+                
+                <p class="mt-4">
+                    <a href="/" class="text-gray-500 hover:text-gray-700 text-sm">
+                        <i class="fas fa-arrow-left mr-1"></i>
+                        Back to Home
+                    </a>
+                </p>
+            </div>
+        </div>
+        
+        <!-- Success/Error Messages -->
+        <div id="messages" class="space-y-3"></div>
+    </div>
+</div>
+
+<script>
+// Check if already logged in
+function checkAuthAndRedirect() {
+    const token = localStorage.getItem('authToken');
+    const user = localStorage.getItem('currentUser');
+    
+    if (token && user) {
+        window.location.href = '/dashboard';
+        return;
+    }
+}
+
+// Registration form handler
+document.getElementById('registerForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = {
+        name: document.getElementById('name').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
+        location: document.getElementById('location').value.trim(),
+        language: document.getElementById('language').value
+    };
+    
+    // Add optional fields if provided
+    const farmSize = document.getElementById('farmSize').value;
+    const experience = document.getElementById('experience').value;
+    
+    if (farmSize) formData.farm_size = parseFloat(farmSize);
+    if (experience) formData.farming_experience = parseInt(experience);
+    
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+    
+    // Client-side validation
+    if (!formData.name || !formData.phone || !formData.location || !formData.language) {
+        showMessage('Please fill in all required fields', 'error');
+        return;
+    }
+    
+    if (formData.name.length < 2) {
+        showMessage('Name must be at least 2 characters long', 'error');
+        return;
+    }
+    
+    // Show loading state
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Creating Account...';
+    submitBtn.disabled = true;
+    clearMessages();
+    
+    try {
+        const response = await fetch('/api/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData)
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            // Store authentication data
+            localStorage.setItem('authToken', data.access_token);
+            localStorage.setItem('currentUser', JSON.stringify(data.user));
+            
+            showMessage('Account created successfully! Redirecting...', 'success');
+            
+            // Redirect to dashboard after brief delay
+            setTimeout(() => {
+                window.location.href = '/dashboard';
+            }, 1000);
+            
+        } else {
+            showMessage(data.error || 'Registration failed. Please check your information.', 'error');
+        }
+        
+    } catch (error) {
+        console.error('Registration error:', error);
+        showMessage('Network error. Please check your connection and try again.', 'error');
+    } finally {
+        // Reset button state
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+    }
+});
+
+// Message display functions
+function showMessage(message, type) {
+    const messagesContainer = document.getElementById('messages');
+    const messageDiv = document.createElement('div');
+    
+    messageDiv.className = `p-4 rounded-lg text-sm font-medium ${
+        type === 'error' 
+            ? 'bg-red-50 text-red-700 border border-red-200' 
+            : 'bg-green-50 text-green-700 border border-green-200'
+    }`;
+    
+    messageDiv.innerHTML = `
+        <div class="flex items-center">
+            <i class="fas fa-${type === 'error' ? 'exclamation-circle' : 'check-circle'} mr-2"></i>
+            ${message}
+        </div>
+    `;
+    
+    messagesContainer.appendChild(messageDiv);
+    
+    // Auto-remove after 5 seconds for error messages
+    if (type === 'error') {
+        setTimeout(() => {
+            if (messageDiv.parentNode) {
+                messageDiv.remove();
+            }
+        }, 5000);
+    }
+}
+
+function clearMessages() {
+    document.getElementById('messages').innerHTML = '';
+}
+
+// Phone number formatting helper
+document.getElementById('phone').addEventListener('input', function(e) {
+    let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+    
+    // Ensure it starts with 0 for Nigerian numbers
+    if (value.length > 0 && !value.startsWith('0')) {
+        value = '0' + value;
+    }
+    
+    // Limit to 11 digits for Nigerian numbers
+    if (value.length > 11) {
+        value = value.substring(0, 11);
+    }
+    
+    e.target.value = value;
+});
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+    checkAuthAndRedirect();
+    
+    // Focus on name input
+    document.getElementById('name').focus();
+});
+</script>
+{% endblock %}
